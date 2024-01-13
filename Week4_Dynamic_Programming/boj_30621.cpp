@@ -27,24 +27,23 @@ int main() {
         cin >> a[i].c;
     }
     sort(a + 1, a + 1 + n, [](const ugh &a, const ugh &b) {
-        return a.t < b.t;
+        return a.t < b.t; // 발성 가능 시간의 오름차순으로 정렬
     });
 
     dp[1] = a[1].c;
     for(int i = 2; i <= n; ++i) {
-        int idx = 0, lim = a[i].t - a[i].b;
+        int lim = a[i].t - a[i].b; // lim 이후부터 발성하면 안됨
         for(int left = 1, right = i, mid = (i + 1) / 2; left <= right; mid = (left + right) / 2) {
-            if(a[mid].t >= lim) {
+            if(a[mid].t >= lim) { // lim 이후에 발성한 경우이므로 새롭게 발성할 수 없음
                 right = mid - 1;
             }
-            else {
-                idx = mid;
+            else { // 새롭게 발성할 수 있는 경우 해당하는 경우 중 dp[i]를 가장 크게 갱신할 수 있는 값을 찾아감
                 left = mid + 1;
+                if(dp[i] < dp[mid] + a[i].c)
+                    dp[i] = dp[mid] + a[i].c;
             }
         }
-        dp[i] = dp[idx] + a[i].c;
         if(ans < dp[i]) ans = dp[i];
     }
-
     cout << ans << '\n';
 }
