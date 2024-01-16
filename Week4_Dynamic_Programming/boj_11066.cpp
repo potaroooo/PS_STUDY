@@ -3,7 +3,7 @@ using namespace std;
 // #define DEBUG
 constexpr int MX = 987654321;
 
-int tc, k, a[501], sum[501], dp[501][501];
+int tc, k, a[501], sum[501], dp[501][501], dp2[501][501];
 
 int main() {
     cin.tie(0);
@@ -16,18 +16,22 @@ int main() {
         for(int i = 1; i <= k; ++i) {
             cin >> a[i];
             sum[i] = a[i] + sum[i - 1];
+            dp2[i][i] = i;
         }
 
         for(int len = 2; len <= k; ++len) { // 구간의 길이
             for(int left = 1; left <= k - len + 1; ++left) { // 구간 시작점
                 int right = left + len - 1; // 구간 끝점
                 dp[left][right] = MX;
-                for(int mid = left; mid < right; ++mid) { // 구간 분할점
+                for(int mid = dp2[left][right - 1]; mid <= dp2[left + 1][right]; ++mid) { // 구간 분할점(커누스 최적화)
                     int cost = dp[left][mid] + dp[mid + 1][right] + sum[right] - sum[left - 1];
                     #ifdef DEBUG
                     cout << "left : " << left << ", mid : " << mid << ", right : " << right << ", cost : " << cost << '\n';
                     #endif
-                    if(cost < dp[left][right]) dp[left][right] = cost;
+                    if(cost < dp[left][right]) {
+                        dp[left][right] = cost;
+                        dp2[left][right] = mid; // 구간을 최적으로 분할하는 분할점 저장
+                    }
                 }
             }
         }
