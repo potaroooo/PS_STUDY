@@ -14,7 +14,7 @@ int main() {
         return 0;
     }
 
-    int swap_cnt = n - k - 1, last_swap = 0;
+    int swap_cnt = n - k - 1;
     int *a = new int[n + 2];
     for(int i = 1; i <= n; ++i) {
         a[i] = i;
