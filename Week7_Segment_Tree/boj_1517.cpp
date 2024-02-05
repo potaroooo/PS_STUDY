@@ -37,7 +37,6 @@ int main() {
         arr[i] = {num, i};
     }
     sort(arr, arr + n);
-
     ll ans = 0LL;
     for(int i = 0, idx; i < n; ++i) {
         idx = arr[i].second;
